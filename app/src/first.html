@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html ng-app="productApp">
+<head>
+  <title>Product Management</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      width: 100%;
+      max-width: 800px;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #4CAF50;
+    }
+    .product-form, .product-list {
+      margin-bottom: 20px;
+    }
+    .product {
+      border: 1px solid #4CAF50;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      background-color: #f9f9f9;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .product h3 {
+      color: #2E7D32;
+      margin: 0;
+      font-size: 24px;
+    }
+    .product p {
+      font-size: 16px;
+      margin: 8px 0;
+      color: #555;
+    }
+    .stars {
+      color: #FFD700;
+      margin-bottom: 10px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .error-message {
+      color: red;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" ng-controller="ProductController">
+    <h1>Product Management</h1>
+    <div class="product-form">
+      <h2>{{editMode ? 'Edit' : 'Add'}} Product</h2>
+      <form ng-submit="editMode ? updateProduct() : addProduct()">
+        <p>
+          <label>Name:</label>
+          <input type="text" ng-model="newProduct.name" required>
+        </p>
+        <p>
+          <label>Price:</label>
+          <input type="number" ng-model="newProduct.price" min="0" value="0" step="any" required>
+        </p>
+        <p>
+          <label>Review:</label>
+          <input type="text" ng-model="newProduct.review">
+        </p>
+        <p>
+          <label>Rating:</label>
+          <input type="number" step="0.1" ng-model="newProduct.rating" required>
+        </p>
+        <button type="submit" ng-disabled="newProduct.rating >= 6">{{editMode ? 'Update' : 'Add'}} Product</button>
+      </form>
+      <div class="error-message" ng-if="newProduct.rating >= 6">
+        Rating must be less than 5.
+      </div>
+    </div>
+    <div class="product-list">
+      <h2>Product List</h2>
+      <div class="product" ng-repeat="product in products track by $index">
+        <h3>{{ product.name }}</h3>
+        <p><strong>Price:</strong> ${{ product.price }}</p>
+        <p><strong>Ratings:</strong> {{ product.rating }}</p>
+        <p><strong>Reviews:</strong> {{ product.review }}</p>
+        <button ng-click="editProduct(product)">Edit</button>
+        <button ng-click="deleteProduct(product.id)">Delete</button>
+      </div>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
